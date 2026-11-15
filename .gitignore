@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+!.env.deploy.example
+.env.deploy
+node_modules/
+dist/
+coverage/
+.deploy.lock/
+.DS_Store
