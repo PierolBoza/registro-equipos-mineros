@@ -7,4 +7,5 @@ node_modules/
 dist/
 coverage/
 .deploy.lock/
+/work/
 .DS_Store
