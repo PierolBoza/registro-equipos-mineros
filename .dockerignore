@@ -1,0 +1,8 @@
+.env*
+.git
+**/node_modules
+**/dist
+coverage
+.deploy.lock
+work
+outputs
