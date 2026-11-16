@@ -147,6 +147,12 @@ preflight() {
   if ! "${VERCEL_CMD[@]}" --help >/dev/null; then
     fail 10 'No se pudo ejecutar Vercel CLI. Comprueba tu conexión y vuelve a intentarlo.'
   fi
+  if ! "${VERCEL_CMD[@]}" link --help >/dev/null; then
+    fail 10 'No se pudo validar la ayuda de Vercel link.'
+  fi
+  if ! "${VERCEL_CMD[@]}" deploy --help >/dev/null; then
+    fail 10 'No se pudo validar la ayuda de Vercel deploy.'
+  fi
 
   BACKEND_URL="${BACKEND_URL%/}"
   FRONTEND_URL="${FRONTEND_URL%/}"
