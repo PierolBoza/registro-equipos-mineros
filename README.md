@@ -27,7 +27,11 @@ flowchart LR
 
 Render Free puede dormir el backend después de 15 minutos sin tráfico; la primera solicitud posterior puede tardar alrededor de un minuto. Vercel Hobby es para proyectos personales o no comerciales. Se eligieron planes gratuitos y no se agrega un método de pago.
 
-Las URLs públicas se completan cuando se ejecute el primer despliegue. Los nombres iniciales están en `.env.deploy.example`.
+URLs publicadas:
+
+- Frontend: <https://registro-equipos-mineros-pierol.vercel.app>
+- API: <https://registro-equipos-mineros-pierol-api.onrender.com>
+- Salud del API: <https://registro-equipos-mineros-pierol-api.onrender.com/health>
 
 ## Requisitos
 
@@ -94,7 +98,7 @@ La combinación gratuita es Neon para PostgreSQL, Render Free para el API y Verc
 
 Códigos de salida: `10` configuración/preflight, `11` ya hay otro despliegue en curso, `20` build local, `30` migraciones, `40` despliegue Render, `41` health o rollback de Render, `50` despliegue Vercel y `60` verificación pública.
 
-La publicación requiere credenciales de las cuentas. En este repositorio todavía no se registran URLs públicas; se mostrarán cuando el primer despliegue termine correctamente.
+La publicación requiere credenciales de las cuentas. Las URLs actuales están en la sección **Arquitectura**; si cambian, actualiza también las variables `FRONTEND_URL` y `BACKEND_URL` de `.env.deploy` y el origen CORS del backend.
 
 ## Variables de entorno
 
