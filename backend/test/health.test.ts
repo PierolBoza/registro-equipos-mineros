@@ -1,7 +1,9 @@
 import express from 'express';
+import pg from 'pg';
 import request from 'supertest';
 import { describe, expect, it, vi } from 'vitest';
 import { createApp } from '../src/app.js';
+import { checkDatabase } from '../src/db.js';
 import { errorHandler } from '../src/errors.js';
 
 describe('health y CORS', () => {
@@ -13,6 +15,23 @@ describe('health y CORS', () => {
     expect(response.status).toBe(503);
     expect(response.body).toEqual({ status: 'error', db: 'down' });
     expect(JSON.stringify(response.body)).not.toContain('secreto');
+  });
+
+  it('responde 503 cuando PostgreSQL apunta a un puerto inválido', async () => {
+    const unavailablePool = new pg.Pool({
+      connectionString: 'postgres://postgres:postgres@127.0.0.1:1/equipos_test',
+      connectionTimeoutMillis: 250,
+    });
+
+    try {
+      const response = await request(
+        createApp(() => checkDatabase(unavailablePool)),
+      ).get('/health');
+      expect(response.status).toBe(503);
+      expect(response.body).toEqual({ status: 'error', db: 'down' });
+    } finally {
+      await unavailablePool.end();
+    }
   });
 
   it('permite el preflight del origen configurado', async () => {

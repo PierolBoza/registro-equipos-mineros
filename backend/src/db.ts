@@ -1,4 +1,4 @@
-import pg from 'pg';
+import pg, { type Pool as PgPool } from 'pg';
 import { config } from './config.js';
 
 const { Pool, types } = pg;
@@ -40,11 +40,13 @@ export async function withTransaction<T>(
   }
 }
 
-export async function checkDatabase(): Promise<void> {
+export async function checkDatabase(
+  databasePool: Pick<PgPool, 'query'> = pool,
+): Promise<void> {
   let timeoutHandle: NodeJS.Timeout | undefined;
   try {
     await Promise.race([
-      pool.query('SELECT 1').then(() => undefined),
+      databasePool.query('SELECT 1').then(() => undefined),
       new Promise<never>((_resolve, reject) => {
         timeoutHandle = setTimeout(
           () => reject(new Error('Tiempo de espera agotado.')),
