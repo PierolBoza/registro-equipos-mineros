@@ -1,0 +1,67 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: equipos_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d equipos_test"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12
+          cache: npm
+          cache-dependency-path: |
+            backend/package-lock.json
+            frontend/package-lock.json
+      - name: Instalar dependencias
+        run: |
+          npm ci --prefix backend
+          npm ci --prefix frontend
+      - name: Revisar formato
+        run: >-
+          backend/node_modules/.bin/prettier --check
+          "backend/src/**/*.ts"
+          "backend/scripts/**/*.ts"
+          "backend/test/**/*.ts"
+          "scripts/*.mjs"
+          "backend/*.json"
+          "frontend/src/**/*.{ts,tsx,css}"
+          "frontend/*.json"
+          "README.md"
+          "docs/*.md"
+          ".github/workflows/*.yml"
+          "docker-compose.yml"
+      - name: Revisar scripts Bash
+        run: shellcheck deploy.sh
+      - name: Verificar TypeScript del backend
+        run: npm --prefix backend run typecheck
+      - name: Ejecutar tests
+        run: npm --prefix backend test
+        env:
+          TEST_DATABASE_URL: postgres://postgres:postgres@localhost:5432/equipos_test
+      - name: Compilar backend
+        run: npm --prefix backend run build
+      - name: Compilar frontend
+        run: npm --prefix frontend run build
+        env:
+          VITE_API_URL: https://api.example.invalid
