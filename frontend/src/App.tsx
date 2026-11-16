@@ -205,7 +205,7 @@ export default function App() {
       <header className="hero">
         <div className="hero-copy">
           <p className="eyebrow">CONTROL DE FLOTA</p>
-          <h1>Equipos mineros</h1>
+          <h1>Registro de equipos</h1>
           <p className="hero-description">
             Registra horómetros y mantén visible el estado de cada equipo.
           </p>
