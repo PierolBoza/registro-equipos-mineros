@@ -10,4 +10,5 @@ coverage/
 .vercel/
 *.tsbuildinfo
 /work/
+/outputs/
 .DS_Store
