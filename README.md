@@ -82,11 +82,13 @@ Los tests usan la base separada `equipos_test`; no apuntes `TEST_DATABASE_URL` a
 La combinación gratuita es Neon para PostgreSQL, Render Free para el API y Vercel Hobby para el frontend. Render puede dormir el servicio y suspenderlo si se agotan los límites gratuitos. No añadas un método de pago si el objetivo es mantener el gasto en cero. Vercel Hobby solo admite uso personal/no comercial.
 
 1. Confirma que la rama `main` del repositorio público esté actualizada.
-2. En Render, autoriza la integración con GitHub para que Render pueda leer el repositorio.
-3. En Neon, abre **Connect** para obtener la URL de la base. Usa la conexión con pooler en `DATABASE_URL` y la conexión directa en `MIGRATION_DATABASE_URL`.
-4. Crea un token de API en Render y un token en Vercel. Copia `.env.deploy.example` a `.env.deploy` y completa esos valores localmente. El ID del workspace de Render aparece en los ajustes del workspace; `VERCEL_SCOPE` solo se necesita si usas un equipo de Vercel.
-5. Ajusta `FRONTEND_URL` si el dominio predeterminado de Vercel está ocupado. Debe ser el dominio exacto del proyecto, porque el backend solo acepta ese origen.
-6. Desde Bash, en la raíz del repositorio, ejecuta `./deploy.sh --check` y luego `./deploy.sh` (o `make deploy`). El script construye ambos proyectos antes de tocar producción, aplica las migraciones, configura y despliega el backend, publica el frontend y comprueba health, HTML, CORS y tipos.
+2. En Render, ve a **Account Settings → Account Security → Git Deployment Credentials → Add credential → GitHub** y concede acceso al repositorio. No crees el servicio desde el selector del panel: `deploy.sh` lo crea en el plan Free. ([Conectar GitHub](https://render.com/docs/git-provider))
+3. En Neon, abre **Connect**, selecciona la rama, base y rol del proyecto y copia la URL con **Connection pooling** activado en `DATABASE_URL`; desactívalo y copia la URL directa en `MIGRATION_DATABASE_URL`. ([Conexiones Neon](https://neon.com/docs/connect/connection-pooling))
+4. En Render, crea una API key desde **Account Settings → API Keys** y copia el ID de workspace desde **Workspace Settings**. ([API de Render](https://render.com/docs/api))
+5. Crea o abre tu cuenta de Vercel con GitHub, elige Hobby y crea un token desde **Account Settings → Tokens**. Hobby es gratis para uso personal/no comercial; no inicies una prueba Pro ni agregues una tarjeta. El script crea el proyecto Vercel si aún no existe. `VERCEL_SCOPE` queda vacío para una cuenta personal. ([Plan Hobby](https://vercel.com/docs/plans/hobby))
+6. Copia `.env.deploy.example` a `.env.deploy` y completa allí las claves y URLs localmente. No las pegues en GitHub ni en el chat.
+7. Ajusta `FRONTEND_URL` si el dominio predeterminado de Vercel está ocupado. Debe ser el dominio exacto del proyecto, porque el backend solo acepta ese origen.
+8. Desde Bash, en la raíz del repositorio, ejecuta `./deploy.sh --check` y luego `./deploy.sh` (o `make deploy`). El script construye ambos proyectos antes de tocar producción, aplica las migraciones, configura y despliega el backend, publica el frontend y comprueba health, HTML, CORS y tipos.
 
 `.env.deploy` se interpreta como un archivo de asignaciones Bash. Pon entre comillas los valores de Neon, tokens y URLs. No pegues esos valores en GitHub, en el chat ni en archivos versionados.
 
