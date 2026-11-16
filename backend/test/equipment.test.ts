@@ -41,6 +41,7 @@ describe('API de equipos', () => {
   it.each([
     { code: 'CAM-02', type: 'tractor', hour_meter: 0 },
     { code: 'CAM-02', type: 'camion', hour_meter: -1 },
+    { code: 'CAM-02', type: 'camion', hour_meter: 'texto' },
     { code: 'CAM-02', type: 'camion', hour_meter: 1.23 },
     { code: 'CAM-02', type: 'camion', hour_meter: 10_000_000 },
   ])('valida el tipo y el horómetro: %j', async (body) => {
@@ -182,9 +183,10 @@ describe('API de equipos', () => {
 
   it('elimina el equipo y su historial en cascada', async () => {
     const created = await createTruck('CAM-DELETE', 20);
-    await request(app)
+    const maintenance = await request(app)
       .post(`/api/equipment/${created.body.id}/maintenance`)
       .send({});
+    expect(maintenance.status).toBe(201);
     const deleted = await request(app).delete(
       `/api/equipment/${created.body.id}`,
     );
