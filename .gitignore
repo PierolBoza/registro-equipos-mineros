@@ -7,5 +7,7 @@ node_modules/
 dist/
 coverage/
 .deploy.lock/
+.vercel/
+*.tsbuildinfo
 /work/
 .DS_Store
