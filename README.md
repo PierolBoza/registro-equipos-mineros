@@ -46,7 +46,7 @@ Desde la raíz del repositorio:
 5. En una terminal ejecuta `npm --prefix backend run dev`.
 6. En otra terminal ejecuta `npm --prefix frontend run dev` y abre `http://localhost:5173`.
 
-La imagen local crea las bases `equipos` y `equipos_test` al inicializar el volumen. El API escucha en `http://localhost:8080`.
+La imagen local crea las bases `equipos` y `equipos_test` al inicializar el volumen. PostgreSQL se publica en el puerto `5433` para evitar chocar con una instalación local que ya use `5432`; el API escucha en `http://localhost:8080`.
 
 ## API
 
