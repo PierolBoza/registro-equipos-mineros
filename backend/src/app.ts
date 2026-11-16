@@ -2,6 +2,8 @@ import express, { type RequestHandler } from 'express';
 import { config } from './config.js';
 import { checkDatabase } from './db.js';
 import { AppError, errorHandler } from './errors.js';
+import { createEquipmentRouter } from './routes/equipment.js';
+import { createEquipmentTypesRouter } from './routes/equipmentTypes.js';
 import { createHealthRouter } from './routes/health.js';
 
 export function createApp(healthCheck: () => Promise<void> = checkDatabase) {
@@ -15,6 +17,8 @@ export function createApp(healthCheck: () => Promise<void> = checkDatabase) {
   app.use(express.json({ limit: '10kb' }));
 
   app.use(createHealthRouter(healthCheck));
+  app.use('/api/equipment-types', createEquipmentTypesRouter());
+  app.use('/api/equipment', createEquipmentRouter());
 
   app.use((_request, _response, next) => {
     next(new AppError(404, 'NOT_FOUND', 'La ruta solicitada no existe.'));
